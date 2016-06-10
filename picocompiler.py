@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys, getopt, time, glob, os
+import sys, getopt, time, glob, os, ConfigParser, subprocess
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
@@ -28,11 +28,25 @@ def CreatePicoFile():
 
 	picoFile.close()
 
+	if runOnCompile:
+		global runningPico
+		runningPico.kill()
+		str = picoPath + " -run " + outputFile.replace(" ", "\\ ")
+		runningPico = subprocess.Popen(str,stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+
 def GetLine(file, phrase):
 	for num, line in enumerate(file):
 		if phrase in line:
 			return num
 	return -1
+
+def LoadConfig(path):
+	config = ConfigParser.ConfigParser()
+	config.read(path)
+	options = config.options("config")
+	global picoPath
+	picoPath = config.get("config", "picopath")
 	
 class ChangeHandler(PatternMatchingEventHandler):
 	patterns = ["*.lua"]
@@ -42,12 +56,14 @@ class ChangeHandler(PatternMatchingEventHandler):
 		CreatePicoFile()
 
 
-
 inputFolder=""
 outputFile = ""
+runOnCompile = False
+picoPath = ""
+configPath = "./config"
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "hi:o", ["folder=", "output="])
+	opts, args = getopt.getopt(sys.argv[1:], "h:i:o:r", ["folder=", "output=", "--run"])
 except getopt.GetoptError:
 	print 'python picocompiler.py --folder <inputFolder> --output <outputFile>'
 	sys.exit(2)
@@ -60,13 +76,22 @@ for opt, arg, in opts:
 		inputFolder = arg
 	elif opt in ("--output"):
 		outputFile = arg
+	elif opt in ("-r", "--run"):
+		runOnCompile = True
 
 event_handler = ChangeHandler()
 observer = Observer()
 observer.schedule(event_handler, path=inputFolder, recursive=False)
 observer.start()
 
+LoadConfig(configPath)
+
 print "Starting Pico Compiler!"
+
+if runOnCompile is True:
+	runningPico = subprocess.Popen("",stdout=subprocess.PIPE, shell=True)
+
+CreatePicoFile()
 
 try:
 	while True:

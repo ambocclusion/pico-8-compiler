@@ -1,0 +1,8 @@
+[config]
+# uncomment your os
+# MacOSX pico8 path
+picopath="/Applications/PICO-8.app/Contents/MacOS/pico8"
+# Linux pico8 path
+#picopath="~/Downloads/pico8"
+# Windows pico8 path
+#picopath="C:/Program Files/pico8/pico8.exe"

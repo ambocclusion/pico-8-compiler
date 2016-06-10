@@ -10,7 +10,7 @@ Requires watchdog
 https://pypi.python.org/pypi/watchdog
 
 ###Use it like this
-python picocompiler.py --folder 'folder for scripts' --output 'valid pico-8 file'
+python picocompiler.py --folder 'folder for scripts' --output 'valid pico-8 file' -r
 
 Put lua files inside of the defined folder and a valid p8 file generated from Pico 8. The compiler should allow you to edit your graphics, sounds and maps separately, but it's not two-way and always keep a backup!!!
 
