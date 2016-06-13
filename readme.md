@@ -17,7 +17,7 @@ Put lua files inside of the defined folder and a valid p8 file generated from Pi
 Just let it run while you edit the files. If the p8 file doesn't generate at first, try saving a .lua file in the designated folder. You should get a confirmation that a file changed in the terminal log.
 
 ## WARNING
-### THE CODE ISN'T GREAT AND WILL PROBABLY WIPE YOUR P8 FILES OFTEN. PLEASE BACKUP
+Please keep frequent backups, this script replaces all of the text between '__lua__' and '__gfx__' on compile, so you will lose any edits made inside of the Pico-8 text editor.
 
 ## Future Plans
 - Auto-generate p8 file when no valid one is given
